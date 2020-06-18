@@ -16,7 +16,6 @@ const fileFilter = (req, file, cb) => {
 };
 const upload = multer({
   storage: storage,
-  limits: { fieldSize: 1024 * 1024 * 5 },
   fileFilter: fileFilter,
 });
 router.get("/", async (req, res) => {
@@ -57,8 +56,11 @@ router.get("/:id", async (req, res) => {
   console.log(result);
 });
 router.post("/", upload.array("productImage", 3), async (req, res) => {
+  console.log(req.body);
   path_arr = req.files.map((v) => v.path);
-  console.log(path_arr);
+  var files = req.body.files;
+
+  console.log(files);
   var product = new Product({
     name: req.body.name,
     size: req.body.size,

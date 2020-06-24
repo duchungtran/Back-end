@@ -19,12 +19,14 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 router.get("/", async (req, res) => {
+  console.log(req.query);
   const page = req.query.page || 1;
   const size = parseInt(req.query.size);
   let total = -1;
   let filter = {};
   if (req.query.updates) {
     filter = JSON.parse(req.query.updates);
+    console.log(filter);
   }
   let query = {};
   if (filter) {
@@ -38,8 +40,10 @@ router.get("/", async (req, res) => {
         .skip((page - 1) * size)
         .limit(size);
       res.json(result);
+      //console.log(result);
     } else {
       var result = await Product.find();
+
       res.json(result);
     }
   } catch (err) {
@@ -56,11 +60,7 @@ router.get("/:id", async (req, res) => {
   console.log(result);
 });
 router.post("/", upload.array("productImage", 3), async (req, res) => {
-  console.log(req.body);
   path_arr = req.files.map((v) => v.path);
-  var files = req.body.files;
-
-  console.log(files);
   var product = new Product({
     name: req.body.name,
     size: req.body.size,
@@ -77,5 +77,24 @@ router.post("/", upload.array("productImage", 3), async (req, res) => {
     res.json({ message: err });
   }
 });
-
+router.put("/:id", async (req, res) => {
+  console.log(req.body);
+  try {
+    const updateProduct = await Product.update(
+      { _id: req.params.id },
+      { $set: req.body }
+    );
+    res.json(updateProduct);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
+router.delete("/:id", async (req, res) => {
+  try {
+    const removeProduct = await Product.deleteOne({ _id: req.params.id });
+    res.json(removeProduct);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
 module.exports = router;

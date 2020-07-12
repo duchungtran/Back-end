@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
   let filter = {};
   if (req.query.updates) {
     filter = JSON.parse(req.query.updates);
-    console.log(filter);
+    //console.log(filter);
   }
   let query = {};
   if (filter) {
@@ -57,7 +57,7 @@ router.get("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).send(err);
   }
-  console.log(result);
+  //console.log(result);
 });
 router.post("/", upload.array("productImage", 3), async (req, res) => {
   path_arr = req.files.map((v) => v.path);
@@ -78,7 +78,7 @@ router.post("/", upload.array("productImage", 3), async (req, res) => {
   }
 });
 router.put("/:id", async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   try {
     const updateProduct = await Product.update(
       { _id: req.params.id },

@@ -1,20 +1,27 @@
 const mongoose = require("mongoose");
 const Order = require("./Order");
 const Product = require("./Product");
-
 const orderdetailSchema = mongoose.Schema({
-  order_id: {
+  id: {
+    type: String,
+    required: true,
+  },
+  order: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Order",
     required: true,
   },
-  product_id: {
-    type: mongoose.Schema.Types.ObjectId,
+  product: {
+    type: [mongoose.Schema.Types.ObjectId],
     ref: "Product",
     required: true,
   },
+  size: {
+    type: [Number],
+    required: true,
+  },
   soluong: {
-    type: Number,
+    type: [Number],
     required: true,
   },
   mota: {
@@ -22,4 +29,4 @@ const orderdetailSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose("OrderDetail", orderdetailSchema);
+module.exports = mongoose.model("OrderDetail", orderdetailSchema);

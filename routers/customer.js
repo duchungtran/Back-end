@@ -33,7 +33,10 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
+  //if (req.body) {
   //const { error } = registerValidation(req.body);
+  //if (error) return res.status(400).send(error.details[0].message);
+  //}
   let customerExit = await Customer.findOne({ username: req.body.username });
   if (customerExit) return res.status(400).send("Tên tài khoản đã tồn tại");
   const salt = await bcrypt.genSalt(10);

@@ -8,6 +8,7 @@ const productRouter = require("./routers/product");
 const orderRouter = require("./routers/order");
 const userRouter = require("./routers/user");
 const orderDetailRouter = require("./routers/orderdetail");
+const completeOrderRouter = require("./routers/completeorder");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const db = mongoose.connection;
@@ -22,6 +23,7 @@ app.use("/product", productRouter);
 app.use("/user", userRouter);
 app.use("/order", orderRouter);
 app.use("/orderdetail", orderDetailRouter);
+app.use("/completeorder", completeOrderRouter);
 app.use("/upload", express.static("upload"));
 app.get("/", function (req, res) {
   res.send("Hello");

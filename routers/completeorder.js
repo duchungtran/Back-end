@@ -1,6 +1,6 @@
 const expess = require("express");
 const router = expess.Router();
-const OrderDetail = require("../models/OrderDetail");
+const CompleteOrder = require("../models/CompleteOrder");
 
 router.get("/", async (req, res) => {
   console.log(req.query);
@@ -20,14 +20,14 @@ router.get("/", async (req, res) => {
   }
   try {
     if (req.query) {
-      var result = await OrderDetail.find(query)
+      var result = await CompleteOrder.find(query)
         .skip((page - 1) * size)
         .limit(size)
         .populate({ path: "order", populate: { path: "customer" } })
         .populate("product.product");
       res.json(result);
     } else {
-      var result = await OrderDetail.find()
+      var result = await CompleteOrder.find()
         .populate({ path: "order", populate: { path: "customer" } })
         .populate("product.product");
       res.json(result);
@@ -39,27 +39,22 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  var result = "";
-  var characters = "0123456789";
-  var charactersLength = characters.length;
-  for (var i = 0; i < 7; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  productId = req.body.orderDetail.map((v) => v.id);
-  sizes = req.body.orderDetail.map((v) => v.size);
-  soluongs = req.body.orderDetail.map((v) => v.soluong);
-  const orderDetail = new OrderDetail({
-    id: "Order" + result,
+  //console.log(req.body);
+  productId = req.body.product.map((v) => v.id);
+  sizes = req.body.size.map((v) => v.size);
+  soluongs = req.body.soluong.map((v) => v.soluong);
+  const completeOrder = new CompleteOrder({
+    id: req.body.id,
     order: req.body.order,
-    product: productId,
-    size: sizes,
-    soluong: soluongs,
+    product: req.body.product,
+    size: req.body.size,
+    soluong: req.body.soluong,
     mota: req.body.mota,
   });
-  //console.log(orderDetail);
+  console.log(completeOrder);
   try {
-    var saveOrderDetail = await orderDetail.save();
-    res.json(saveOrderDetail);
+    var saveCompleteOrder = await completeOrder.save();
+    res.json(saveCompleteOrder);
   } catch (err) {
     res.json({ message: err });
   }
@@ -67,10 +62,10 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    const removeOrderDetail = await OrderDetail.deleteOne({
+    const removeCompleteOrder = await CompleteOrder.deleteOne({
       _id: req.params.id,
     });
-    res.json(removeOrderDetail);
+    res.json(removeCompleteOrder);
   } catch (err) {
     res.json({ message: err });
   }

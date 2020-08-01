@@ -19,7 +19,7 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 router.get("/", async (req, res) => {
-  console.log(req.query);
+  //console.log(req.query);
   const page = req.query.page || 1;
   const size = parseInt(req.query.size);
   let total = -1;
@@ -78,7 +78,7 @@ router.post("/", upload.array("productImage", 3), async (req, res) => {
   }
 });
 router.put("/:id", async (req, res) => {
-  //console.log(req.body);
+  console.log(req.body);
   try {
     const updateProduct = await Product.update(
       { _id: req.params.id },
@@ -93,6 +93,18 @@ router.delete("/:id", async (req, res) => {
   try {
     const removeProduct = await Product.deleteOne({ _id: req.params.id });
     res.json(removeProduct);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
+router.patch("/:id", async (req, res) => {
+  console.log(req.body);
+  try {
+    const updateProduct = await Product.updateOne(
+      { _id: req.params.id },
+      { $set: { soluong: req.body.soluong } }
+    );
+    res.json(updateProduct);
   } catch (err) {
     res.json({ message: err });
   }

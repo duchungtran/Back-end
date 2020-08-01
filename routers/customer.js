@@ -24,9 +24,33 @@ router.post("/login", requiresLogout, async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  //console.log(req.query);
+  const page = req.query.page || 1;
+  const size = parseInt(req.query.size);
+  let total = -1;
+  let filter = {};
+  if (req.query.updates) {
+    filter = JSON.parse(req.query.updates);
+    //console.log(filter);
+  }
+  let query = {};
+  if (filter) {
+    if (filter.value) {
+      query = JSON.parse(filter.value);
+    }
+  }
   try {
-    var result = await Customer.find();
-    res.json(result);
+    if (req.query) {
+      var result = await Customer.find(query)
+        .skip((page - 1) * size)
+        .limit(size);
+      res.json(result);
+      //console.log(result);
+    } else {
+      var result = await Customer.find();
+
+      res.json(result);
+    }
   } catch (err) {
     res.status(500).send(err);
   }
@@ -67,5 +91,24 @@ router.get("/:_id", async (req, res) => {
     res.json({ message: err });
   }
 });
-
+router.put("/:id", async (req, res) => {
+  console.log(req.body);
+  try {
+    const updateCustomer = await Customer.update(
+      { _id: req.params.id },
+      { $set: req.body }
+    );
+    res.json(updateCustomer);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
+router.delete("/:id", async (req, res) => {
+  try {
+    const removeCustomer = await Product.deleteOne({ _id: req.params.id });
+    res.json(removeCustomer);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
 module.exports = router;

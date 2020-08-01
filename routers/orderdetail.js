@@ -3,7 +3,7 @@ const router = expess.Router();
 const OrderDetail = require("../models/OrderDetail");
 
 router.get("/", async (req, res) => {
-  console.log(req.query);
+  //console.log(req.query);
   const page = req.query.page || 1;
   const size = parseInt(req.query.size);
   let total = -1;

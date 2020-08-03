@@ -105,7 +105,7 @@ router.put("/:id", async (req, res) => {
 });
 router.delete("/:id", async (req, res) => {
   try {
-    const removeCustomer = await Product.deleteOne({ _id: req.params.id });
+    const removeCustomer = await Customer.deleteOne({ _id: req.params.id });
     res.json(removeCustomer);
   } catch (err) {
     res.json({ message: err });

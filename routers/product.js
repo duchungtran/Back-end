@@ -24,9 +24,9 @@ router.get("/", async (req, res) => {
   const size = parseInt(req.query.size);
   let total = -1;
   let filter = {};
+  let sort = 1;
   if (req.query.updates) {
     filter = JSON.parse(req.query.updates);
-    //console.log(filter);
   }
   let query = {};
   if (filter) {

@@ -11,11 +11,23 @@ router.get("/", async (req, res) => {
   }
 });
 router.post("/", async (req, res) => {
-  const order = new Order({
-    customer: req.body.customer,
-  });
-  console.log(req.body);
+  //console.log(req.body)
+  let order
+  if (req.body.customer) {
+    order = new Order({
+      customer: req.body.customer,
+      diachi: req.body.diachi,
+      sodienthoai: req.body.sodienthoai,
+    });
+  } else {
+    order = new Order({
+        hoten: req.body.hoten,
+        diachi: req.body.diachi,
+        sodienthoai: req.body.sodienthoai,
+    });
+  }
   try {
+    //console.log(order);
     const saveOrder = await order.save();
     res.json(saveOrder);
   } catch (err) {

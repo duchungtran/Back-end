@@ -26,12 +26,13 @@ router.get("/", async (req, res) => {
         .populate({ path: "order", populate: { path: "customer" } })
         .populate("product.product");
       res.json(result);
+      //console.log(result);
     } else {
       var result = await OrderDetail.find()
         .populate({ path: "order", populate: { path: "customer" } })
         .populate("product.product");
       res.json(result);
-      console.log(result);
+      //console.log(result);
     }
   } catch (err) {
     res.status(500).send(err);
@@ -39,15 +40,24 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  //console.log(req.body.orderDetail.product);
   var result = "";
   var characters = "0123456789";
   var charactersLength = characters.length;
-  for (var i = 0; i < 7; i++) {
+  for (let i = 0; i < 7; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-  productId = req.body.orderDetail.map((v) => v.id);
-  sizes = req.body.orderDetail.map((v) => v.size);
-  soluongs = req.body.orderDetail.map((v) => v.soluong);
+  //console.log(req.body)
+  if(req.body.orderDetail.customer){
+    productId = req.body.orderDetail.product.map((v) => v.productId._id);
+    sizes = req.body.orderDetail.product.map((v) => v.size);
+    soluongs = req.body.orderDetail.product.map((v) => v.quantity);
+  }
+  else{
+    productId = req.body.orderDetail.product.map((v) => v._id);
+    sizes = req.body.orderDetail.product.map((v) => v.size);
+    soluongs = req.body.orderDetail.product.map((v) => v.quantity);
+  }
   const orderDetail = new OrderDetail({
     id: "Order" + result,
     order: req.body.order,
